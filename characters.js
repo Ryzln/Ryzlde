@@ -557,6 +557,29 @@ function renderStats() {
         barsContainer.appendChild(wrap);
     });
 }
+function renderWins() {
+    const list = document.getElementById('wins-list');
+    if (!list) return;
+    const wins = JSON.parse(localStorage.getItem('bracketWins') || '{}');
+    const sorted = Object.entries(wins).sort((a, b) => b[1] - a[1]);
+    if (sorted.length === 0) {
+        list.innerHTML = '<p style="color:#555;font-size:0.8rem;">No bracket wins yet</p>';
+        return;
+    }
+    list.innerHTML = sorted.map(([name, count]) => {
+        const char = characters.find(c => c.name === name);
+        return `
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <img src="${char?.image || ''}" style="width:36px;height:36px;border-radius:8px;object-fit:cover;object-position:top;">
+                <div>
+                    <div style="font-size:0.85rem;font-weight:700;">${name}</div>
+                    <div style="font-size:0.7rem;color:#888;">👑 ${count} win${count > 1 ? 's' : ''}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+renderWins();
  
 // --- Info Popup ---
 function openInfoPopup(char) {
