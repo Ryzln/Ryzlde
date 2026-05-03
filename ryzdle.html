@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chardle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="charcss.css">
+</head>
+<body class="bodys">
+
+<header>
+    <div class="logo">RYZ<span>DLE</span></div>
+    <a href="index.html" class="back-btn">← Back to Profile</a>
+</header>
+
+<main>
+    <!-- Show Selector -->
+    <div class="show-selector" id="show-selector">
+        <h2>CHOOSE A CATEGORY</h2>
+        <div class="show-grid" id="show-grid"></div>
+    </div>
+
+    <!-- Game Area -->
+    <div id="game-area">
+        <div class="game-header">
+            <div class="game-title">Guessing from: <span id="active-show-label"></span></div>
+            <div class="guesses-left">Guesses left: <strong id="guesses-remaining">10</strong> / 10</div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Correct</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Partial match</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#5a1a1a"></div> Wrong</div>
+        </div>
+
+        <div class="guess-row">
+            <div class="guess-input-wrap">
+                <input type="text" id="guess-input" placeholder="Type a character name..." autocomplete="off" />
+                <div id="autocomplete"></div>
+            </div>
+            <button class="guess-btn" id="guess-btn">GUESS</button>
+        </div>
+
+        <div class="columns-header" id="columns-header"></div>
+        <div id="guesses-container"></div>
+
+        <div id="result-banner">
+            <div class="result-emoji" id="result-emoji"></div>
+            <div class="result-title" id="result-title"></div>
+            <div class="result-char">
+                <img id="result-img" src="" alt="">
+                <div class="result-char-info">
+                    <div class="result-char-name" id="result-name"></div>
+                    <div class="result-char-show" id="result-show"></div>
+                </div>
+            </div>
+            <button class="play-again-btn" onclick="playAgain()">PLAY AGAIN</button>
+        </div>
+    </div>
+</main>
+
+<script src="characters.js"></script>
+</body>
+</html>

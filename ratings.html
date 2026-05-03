@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Characters</title>
+    <link rel="stylesheet" href="charcss.css">
+    <style>
+        .sort-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .sort-label {
+            color: #888;
+            font-size: 0.8rem;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        .sort-btn {
+            background: #1a1a1a;
+            color: #aaa;
+            border: 1px solid #333;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .sort-btn:hover {
+            background: #2a2a2a;
+            color: white;
+        }
+        .sort-btn.active {
+            background: #8b0000;
+            color: white;
+            border-color: #8b0000;
+        }
+        .sort-btn .sort-arrow {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+        .ratings-count {
+            margin-left: auto;
+            color: #555;
+            font-size: 0.8rem;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        .ratings-count span {
+            color: #ff2e2e;
+        }
+    </style>
+</head>
+<body>
+
+<header class="banner">
+    <div class="overlay"></div>
+    <div class="ratings-header">
+        <a href="index.html" class="back-btn">← Back</a>
+        <h1>Rate Characters</h1>
+    </div>
+</header>
+
+<main class="ratings-main">
+
+    <div class="ratings-controls">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <input type="text" id="ratings-search" placeholder="Search by name or show..." />
+            <div class="ratings-count">Rated: <span id="rated-count">0</span> / <span id="total-count">0</span></div>
+        </div>
+
+        <!-- Show filters -->
+        <div class="ratings-filters" id="ratings-filters"></div>
+
+        <!-- Sort options -->
+        <div class="sort-bar">
+            <span class="sort-label">Sort:</span>
+            <button class="sort-btn" data-sort="highest">★ Highest <span class="sort-arrow">↓</span></button>
+            <button class="sort-btn" data-sort="lowest">★ Lowest <span class="sort-arrow">↑</span></button>
+            <button class="sort-btn" data-sort="az">A–Z <span class="sort-arrow">↓</span></button>
+            <button class="sort-btn" data-sort="za">Z–A <span class="sort-arrow">↑</span></button>
+        </div>
+    </div>
+
+    <div class="ratings-grid" id="ratings-grid"></div>
+
+</main>
+
+<script src="characters.js"></script>
+<script>
+    const savedRatings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+    Object.assign(userRatings, savedRatings);
+
+    let activeFilter = 'All';
+    let searchQuery = '';
+    let activeSort = null;
+
+    const shows = ['All', ...new Set(characters.map(c => c.show))];
+
+    function buildFilters() {
+        const container = document.getElementById('ratings-filters');
+        shows.forEach(show => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn' + (show === 'All' ? ' active' : '');
+            btn.textContent = show;
+            btn.addEventListener('click', () => {
+                activeFilter = show;
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderGrid();
+            });
+            container.appendChild(btn);
+        });
+    }
+
+    // Sort buttons
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const sort = btn.dataset.sort;
+            if (activeSort === sort) {
+                // Toggle off
+                activeSort = null;
+                btn.classList.remove('active');
+            } else {
+                activeSort = sort;
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            renderGrid();
+        });
+    });
+
+    function sortCharacters(list) {
+        if (!activeSort) return list;
+        const sorted = [...list];
+        switch (activeSort) {
+            case 'highest':
+                return sorted.sort((a, b) => (userRatings[b.name] || 0) - (userRatings[a.name] || 0));
+            case 'lowest':
+                // Unrated go to the bottom
+                return sorted.sort((a, b) => {
+                    const ra = userRatings[a.name] || null;
+                    const rb = userRatings[b.name] || null;
+                    if (ra === null && rb === null) return 0;
+                    if (ra === null) return 1;
+                    if (rb === null) return -1;
+                    return ra - rb;
+                });
+            case 'az':
+                return sorted.sort((a, b) => a.name.localeCompare(b.name));
+            case 'za':
+                return sorted.sort((a, b) => b.name.localeCompare(a.name));
+            default:
+                return list;
+        }
+    }
+
+    function updateCounts(filtered) {
+        const rated = filtered.filter(c => userRatings[c.name]).length;
+        document.getElementById('rated-count').textContent = rated;
+        document.getElementById('total-count').textContent = filtered.length;
+    }
+
+    function renderStarsInline(charName, container) {
+        const current = userRatings[charName] || 0;
+        container.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.className = 'star';
+            if (current >= i) { star.textContent = '★'; star.classList.add('full'); }
+            else if (current >= i - 0.5) { star.textContent = '⯨'; star.classList.add('half'); }
+            else { star.textContent = '☆'; }
+
+            star.addEventListener('click', (e) => {
+                const rect = star.getBoundingClientRect();
+                const isLeftHalf = e.clientX < rect.left + rect.width / 2;
+                userRatings[charName] = isLeftHalf ? i - 0.5 : i;
+                localStorage.setItem('userRatings', JSON.stringify(userRatings));
+                renderStarsInline(charName, container);
+                const ratingVal = container.closest('.rating-card').querySelector('.rc-rating-val');
+                ratingVal.textContent = userRatings[charName] + ' / 5';
+                // Re-sort if sorting by rating
+                if (activeSort === 'highest' || activeSort === 'lowest') renderGrid();
+                updateCounts(getFiltered());
+            });
+
+            star.addEventListener('mousemove', (e) => {
+                const rect = star.getBoundingClientRect();
+                const isLeftHalf = e.clientX < rect.left + rect.width / 2;
+                const preview = i - (isLeftHalf ? 0.5 : 0);
+                container.querySelectorAll('.star').forEach((s, idx) => {
+                    const v = idx + 1;
+                    if (preview >= v) { s.textContent = '★'; s.style.color = '#ff2e2e'; }
+                    else if (preview >= v - 0.5) { s.textContent = '⯨'; s.style.color = '#ff2e2e'; }
+                    else { s.textContent = '☆'; s.style.color = '#444'; }
+                });
+            });
+
+            star.addEventListener('mouseleave', () => {
+                renderStarsInline(charName, container);
+            });
+
+            container.appendChild(star);
+        }
+    }
+
+    function getFiltered() {
+        return characters.filter(c => {
+            const matchesShow = activeFilter === 'All' || c.show === activeFilter;
+            const matchesSearch = c.name.toLowerCase().includes(searchQuery) || c.show.toLowerCase().includes(searchQuery);
+            return matchesShow && matchesSearch;
+        });
+    }
+
+    function renderGrid() {
+        const grid = document.getElementById('ratings-grid');
+        grid.innerHTML = '';
+
+        const filtered = getFiltered();
+        const sorted = sortCharacters(filtered);
+
+        updateCounts(filtered);
+
+        sorted.forEach(char => {
+            const card = document.createElement('div');
+            card.className = 'rating-card';
+            card.innerHTML = `
+                <div class="rc-image" style="background-image: url(${char.image})"></div>
+                <div class="rc-info">
+                    <div class="rc-name">${char.name}</div>
+                    <div class="rc-show">${char.show}</div>
+                    <div class="rc-stars" id="stars-${char.name.replace(/\s/g, '-')}"></div>
+                    <div class="rc-rating-val">${userRatings[char.name] ? userRatings[char.name] + ' / 5' : 'Not rated'}</div>
+                </div>
+            `;
+            grid.appendChild(card);
+            const starsEl = card.querySelector('.rc-stars');
+            renderStarsInline(char.name, starsEl);
+        });
+    }
+
+    buildFilters();
+    renderGrid();
+
+    document.getElementById('ratings-search').addEventListener('input', (e) => {
+        searchQuery = e.target.value.toLowerCase();
+        renderGrid();
+    });
+</script>
+</body>
+</html>
