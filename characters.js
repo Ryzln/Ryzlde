@@ -2,7 +2,7 @@ const characters = [
     {
         name: "Daredevil",
         image: "https://i.pinimg.com/736x/f7/14/f7/f714f79ac688ba8d84e381c57cca53e1.jpg",
-        video: "daredeviledit.mp4",
+        video: "HY1uYpgSU1g",
         show: "MCU",
         bio: "Matt Murdock is a blind lawyer by day and a fearless vigilante by night, protecting Hell's Kitchen from criminals.",
         gender: "Male", role: "Hero", species: "Human", powers: "Enhanced Senses", origin: "Earth", affiliations: "Defenders",
@@ -10,7 +10,7 @@ const characters = [
     {
         name: "Daryl Dixon",
         image: "https://i.pinimg.com/736x/0b/fd/ab/0bfdab9d5725f4350ba8738d2eac97f7.jpg",
-        video: "daryledit.mp4",
+        video: "Wl0LzD1QvP0",
         show: "Walking Dead",
         bio: "A rugged survivor and expert tracker who becomes one of the most valuable members of Rick's group during the zombie apocalypse.",
         gender: "Male", role: "Leader/Hunter", species: "Daryl Dixon", powers: "Survivalist Tracker", origin: "Crossbow Knives Handgun", affiliations: "Atlanta Farm Prison Alexandria Hilltop Commonwealth",
@@ -18,7 +18,7 @@ const characters = [
     {
         name: "Rick Grimes",
         image: "https://i.pinimg.com/736x/e1/1a/a7/e11aa7e3537b05b9ec4a4b1e76679f30.jpg",
-        video: "rickgrimesedit.mp4",
+        video: "BvkRNMNzPto",
         show: "Walking Dead",
         bio: "A former sheriff's deputy who wakes from a coma into a zombie apocalypse and becomes the leader of a group of survivors.",
         gender: "Male", role: "Leader", species: "The Ones Who Live", powers: "Leadership Ruthless Survivalist Tactical", origin: " Revolver Machete Teeth", affiliations: "Atlanta Farm Prison Alexandria",
@@ -26,7 +26,7 @@ const characters = [
     {
         name: "Bullseye",
         image: "https://i.pinimg.com/736x/fb/e3/ca/fbe3caafce1b3fe3d33ee72206926735.jpg",
-        video: "bullseyeedit.mp4",
+        video: "DWh5G3JndGA",
         show: "MCU",
         bio: "A deadly assassin with perfect aim who never misses a target. One of Daredevil's most dangerous and unpredictable enemies.",
         gender: "Male", role: "Villain", species: "Human", powers: "Precision", origin: "Earth", affiliations: "None",
@@ -34,7 +34,7 @@ const characters = [
     {
         name: "Punisher",
         image: "https://i.pinimg.com/1200x/96/70/5b/96705b08bc8692fc8a7fdd1c5280c2ec.jpg",
-        video: "punisheredit.mp4",
+        video: "pDVcX45X6n8",
         show: "MCU",
         bio: "Frank Castle is a war veteran turned vigilante who wages a one-man war on crime after his family is murdered.",
         gender: "Male", role: "Anti-Hero", species: "Human", powers: "Combat/Weapons", origin: "Earth", affiliations: "None",
@@ -42,7 +42,7 @@ const characters = [
     {
         name: "Invincible",
         image: "https://i.pinimg.com/736x/4d/28/95/4d28958c6e73a075a31a6f0a86b43891.jpg",
-        video: "markedit.mp4",
+        video: "X7LOYzvPKBE",
         show: "Invincible",
         bio: "Mark Grayson is a teenager who inherits superpowers from his father and must navigate the brutal reality of being a superhero.",
         gender: "Male", role: "Hero", species: "Half-Viltrumite", powers: "Flight/Strength", origin: "Earth", affiliations: "Teen Team",
@@ -162,7 +162,7 @@ const characters = [
     {
         name: "Conquest",
         image: "https://i.pinimg.com/736x/bc/98/c2/bc98c2f44f7dcf1bbee9f91f422f9037.jpg",
-        video: "conquestedit.mp4",
+        video: "17oBjonB1W4",
         show: "Invincible",
         bio: "A ruthless Viltrumite warrior from Invincible, driven purely by violence and conquest, and known for his brutal, unstoppable nature.",
         gender: "Male", role: "Villain", species: "Viltrumite", powers: "Flight/Strength", origin: "Viltrum", affiliations: "Viltrum Empire",
@@ -186,7 +186,7 @@ const characters = [
     {
         name: "Dean Winchester",
         image: "https://i.pinimg.com/736x/d6/9a/a6/d69aa603e1acb2bac13eecd90b13cdc6.jpg",
-        video: "dean.mp4",
+        video: "XAHajko-qWE",
         show: "Supernatural",
         bio: "A fearless hunter who lives to fight monsters and protect his family, masking deep emotional scars with humor, bravado, and unwavering loyalty.",
         gender: "Male", role: "Hero", species: "Human", powers: "Combat/Hunting", origin: "Earth", affiliations: "Hunters",
@@ -202,7 +202,7 @@ const characters = [
     {
         name: "Billy Butcher",
         image: "https://i.pinimg.com/1200x/64/07/43/640743ab0166876445959c988dad5bf8.jpg",
-        video: "butcher.mp4",
+        video: "2qA-x8jCqZA",
         show: "The Boys",
         bio: "A ruthless, foul-mouthed vigilante who hunts corrupt superheroes, driven by revenge and a willingness to cross any line to get the job done.",
         gender: "Male", role: "Anti-Hero", species: "Human", powers: "Temp-V/Combat", origin: "Earth", affiliations: "The Boys",
@@ -210,7 +210,7 @@ const characters = [
     {
         name: "Anakin Skywalker",
         image: "https://i.pinimg.com/1200x/0c/4c/f1/0c4cf143b48448f1fda928c2bad6471a.jpg",
-        video: "anakin.mp4",
+        video: "4ivEJ3lZ-kE",
         show: "Star Wars",
         bio: "A powerful and conflicted warrior, driven by love and fear, whose struggle with loss and control leads him down a dark path.",
         gender: "Male", role: "Anti-Hero", species: "Human", powers: "Force/Lightsaber", origin: "Tatooine", affiliations: "Jedi/Sith",
@@ -234,7 +234,7 @@ const characters = [
     {
         name: "The Deep",
         image: "https://i.pinimg.com/736x/13/dc/1b/13dc1b8af41dce09d9783e3928d99634.jpg",
-        video: "deep.mp4",
+        video: "ijIevPRZDDk",
         show: "The Boys",
         bio: "A flawed, self-absorbed superhero who tries to maintain his image while constantly making poor choices, often exposing his insecurity beneath the surface.",
         gender: "Male", role: "Villain", species: "Human Mutate", powers: "Aquatic Telepathy", origin: "Earth", affiliations: "The Seven",
@@ -568,9 +568,13 @@ function openInfoPopup(char) {
  
     if (char.video) {
         imageEl.innerHTML = `
-            <video autoplay loop playsinline style="width:100%;height:100%;object-fit:cover;">
-                <source src="${char.video}" type="video/mp4">
-            </video>`;
+            <iframe 
+                src="https://www.youtube-nocookie.com/embed/${char.video}?autoplay=1&mute=1&loop=1&playlist=${char.video}&rel=0"
+                style="width:100%;height:100%;border:none;"
+                allow="autoplay; encrypted-media"
+                allowfullscreen>
+                referrerpolicy="strict-origin-when-cross-origin"
+            </iframe>`;
         imageEl.style.backgroundImage = '';
     } else {
         imageEl.innerHTML = '';
@@ -705,11 +709,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function closeInfoPopup() {
     const imageEl = document.getElementById('info-image');
     const video = imageEl.querySelector('video');
-    if (video) {
-        video.pause();
-        video.src = '';
-        imageEl.innerHTML = '';
-    }
+    if (video) { video.pause(); video.src = ''; }
+    const iframe = imageEl.querySelector('iframe');
+    if (iframe) iframe.src = '';
+    imageEl.innerHTML = '';
     document.getElementById('info-modal').style.display = 'none';
 }
 
