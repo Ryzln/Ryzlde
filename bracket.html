@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bracket — Who Wins?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="charcss.css">
+    <style>
+        :root {
+            --red: #cc0000;
+            --red-bright: #ff2e2e;
+            --gold: #f0c040;
+            --bg: #0a0a0a;
+            --surface: #111;
+            --surface2: #1a1a1a;
+            --border: #2a2a2a;
+            --muted: #666;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body.bracket-page {
+            background: var(--bg);
+            color: white;
+            font-family: 'Barlow', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bracket-page header {
+            background: linear-gradient(180deg, #1a0000 0%, var(--bg) 100%);
+            border-bottom: 2px solid var(--red);
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 3px;
+        }
+
+        .logo span { color: var(--red-bright); }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.2); }
+
+        /* ── SETUP ── */
+        #setup-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 70px);
+            gap: 32px;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        #setup-screen h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5rem;
+            letter-spacing: 6px;
+            line-height: 0.95;
+        }
+
+        #setup-screen h1 span { color: var(--red-bright); }
+
+        #setup-screen p {
+            color: #aaa;
+            font-size: 1.1rem;
+            max-width: 440px;
+            line-height: 1.6;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .size-btn {
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            color: white;
+            padding: 24px 48px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 2px;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .size-btn small {
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.75rem;
+            color: #777;
+            letter-spacing: 1px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .size-btn:hover {
+            border-color: var(--red);
+            background: #180000;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(204,0,0,0.2);
+        }
+
+        /* ── FIGHT SCREEN ── */
+        #fight-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            min-height: calc(100vh - 70px);
+        }
+
+        .fight-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 14px 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .fight-round-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: var(--red-bright);
+        }
+
+        .fight-progress {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.85rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Arena */
+        .fight-arena {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            width: 100%;
+            flex: 1;
+            min-height: calc(100vh - 140px);
+            position: relative;
+        }
+
+        /* Vertical divider */
+        .fight-arena::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 50%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, #333, transparent);
+            pointer-events: none;
+        }
+
+        .fighter-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s;
+            padding: 40px 60px;
+            gap: 24px;
+        }
+
+        /* Glow background on hover */
+        .fighter-side.left:hover {
+            background: radial-gradient(ellipse at left center, rgba(139,0,0,0.12) 0%, transparent 70%);
+        }
+        .fighter-side.right:hover {
+            background: radial-gradient(ellipse at right center, rgba(139,0,0,0.12) 0%, transparent 70%);
+        }
+
+        .fighter-side:hover .fighter-card-img {
+            transform: scale(1.05) translateY(-6px);
+            border-color: var(--red);
+            box-shadow: 0 30px 80px rgba(204,0,0,0.3), 0 0 0 1px var(--red);
+        }
+
+        .fighter-side:hover .pick-hint {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fighter-side:hover .fighter-card-name {
+            color: var(--red-bright);
+        }
+
+        /* Card */
+        .fighter-card-img {
+            width: 300px;
+            height: 380px;
+            object-fit: cover;
+            object-position: top;
+            border-radius: 20px;
+            border: 3px solid var(--border);
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s, box-shadow 0.3s;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+
+        .fighter-card-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
+            letter-spacing: 3px;
+            text-align: center;
+            transition: color 0.2s;
+        }
+
+        .fighter-card-show {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.85rem;
+            color: var(--red-bright);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .pick-hint {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: var(--red);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: 0.25s;
+        }
+
+        /* Enter animation */
+        .slide-in-left {
+            animation: slideInLeft 0.45s cubic-bezier(0.34,1.2,0.64,1) both;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.45s cubic-bezier(0.34,1.2,0.64,1) both;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-80px) scale(0.92); }
+            to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(80px) scale(0.92); }
+            to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        /* VS */
+        .vs-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            flex-shrink: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .vs-line {
+            width: 2px;
+            height: 70px;
+            background: linear-gradient(to bottom, transparent, #cc0000, transparent);
+        }
+
+        .vs-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 4px;
+            color: var(--red-bright);
+            text-shadow: 0 0 30px rgba(255,46,46,0.6);
+            animation: vsPulse 1.6s ease-in-out infinite;
+        }
+
+        @keyframes vsPulse {
+            0%, 100% { text-shadow: 0 0 30px rgba(255,46,46,0.4); }
+            50%       { text-shadow: 0 0 60px rgba(255,46,46,0.9), 0 0 10px rgba(255,46,46,0.5); }
+        }
+
+        /* Flash overlay */
+        .win-flash {
+            position: fixed;
+            inset: 0;
+            background: rgba(204,0,0,0.12);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 999;
+        }
+
+        @keyframes flashAnim {
+            0%   { opacity: 0; }
+            25%  { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* ── CHAMPION ── */
+        #champion-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 70px);
+            gap: 18px;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .champ-crown {
+            font-size: 5rem;
+            animation: floatCrown 2.2s ease-in-out infinite;
+        }
+
+        @keyframes floatCrown {
+            0%, 100% { transform: translateY(0) rotate(-4deg); }
+            50%       { transform: translateY(-14px) rotate(4deg); }
+        }
+
+        .champ-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 6px;
+            color: var(--gold);
+        }
+
+        .champ-img {
+            width: 240px;
+            height: 300px;
+            object-fit: cover;
+            object-position: top;
+            border-radius: 20px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 80px rgba(240,192,64,0.35), 0 20px 60px rgba(0,0,0,0.7);
+            animation: champReveal 0.6s cubic-bezier(0.34,1.4,0.64,1) both;
+        }
+
+        @keyframes champReveal {
+            from { opacity: 0; transform: scale(0.7); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .champ-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            letter-spacing: 5px;
+        }
+
+        .champ-show {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1rem;
+            color: var(--red-bright);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .play-again-btn {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 14px 44px;
+            border-radius: 10px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        .play-again-btn:hover {
+            background: var(--red-bright);
+            transform: scale(1.04);
+        }
+    </style>
+</head>
+<body class="bracket-page">
+
+<header>
+    <div class="logo">RYZ<span>DLE</span></div>
+    <a href="index.html" class="back-btn">← Back to Profile</a>
+</header>
+
+<div class="win-flash" id="win-flash"></div>
+
+<!-- Setup -->
+<div id="setup-screen">
+    <h1>WHO<br>WINS <span>THE<br>FIGHT?</span></h1>
+    <p>Random characters go head to head. Click the one you think wins each round until one champion remains.</p>
+    <div class="size-options">
+        <button class="size-btn" onclick="startBracket(8)">8 <small>characters</small></button>
+        <button class="size-btn" onclick="startBracket(16)">16 <small>characters</small></button>
+    </div>
+</div>
+
+<!-- Fight -->
+<div id="fight-screen">
+    <div class="fight-meta">
+        <div class="fight-round-label" id="fight-round-label">ROUND 1</div>
+        <div class="fight-progress" id="fight-progress"></div>
+    </div>
+    <div class="fight-arena">
+        <div class="fighter-side left" id="side-a" onclick="pickWinner('a')">
+            <img class="fighter-card-img slide-in-left" id="img-a" src="" alt="">
+            <div class="fighter-card-name slide-in-left" id="name-a"></div>
+            <div class="fighter-card-show" id="show-a"></div>
+            <div class="pick-hint">▲ PICK THIS FIGHTER</div>
+        </div>
+        <div class="vs-center">
+            <div class="vs-line"></div>
+            <div class="vs-text">VS</div>
+            <div class="vs-line"></div>
+        </div>
+        <div class="fighter-side right" id="side-b" onclick="pickWinner('b')">
+            <img class="fighter-card-img slide-in-right" id="img-b" src="" alt="">
+            <div class="fighter-card-name slide-in-right" id="name-b"></div>
+            <div class="fighter-card-show" id="show-b"></div>
+            <div class="pick-hint">▲ PICK THIS FIGHTER</div>
+        </div>
+    </div>
+</div>
+
+<!-- Champion -->
+<div id="champion-screen">
+    <div class="champ-crown">👑</div>
+    <div class="champ-label">CHAMPION</div>
+    <img class="champ-img" id="champ-img" src="" alt="">
+    <div class="champ-name" id="champ-name"></div>
+    <div class="champ-show" id="champ-show"></div>
+    <button class="play-again-btn" onclick="resetBracket()">RUN IT BACK</button>
+</div>
+
+<script src="characters.js"></script>
+<script>
+    let pool = [];
+    let rounds = [];
+    let currentRound = 0;
+    let currentMatch = 0;
+    let locked = false;
+
+    function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function getRoundName(roundIndex, totalRounds) {
+        const left = totalRounds - roundIndex;
+        if (left === 1) return 'THE FINAL';
+        if (left === 2) return 'SEMI-FINAL';
+        if (left === 3) return 'QUARTER-FINAL';
+        return `ROUND ${roundIndex + 1}`;
+    }
+
+    function startBracket(size) {
+        pool = shuffle(characters).slice(0, size);
+        rounds = [];
+        currentRound = 0;
+        currentMatch = 0;
+
+        const r1 = [];
+        for (let i = 0; i < pool.length; i += 2) {
+            r1.push({ a: pool[i], b: pool[i + 1], winner: null });
+        }
+        rounds.push(r1);
+
+        document.getElementById('setup-screen').style.display = 'none';
+        document.getElementById('fight-screen').style.display = 'flex';
+        showCurrentMatch();
+    }
+
+    function reAnimate(id, cls) {
+        const el = document.getElementById(id);
+        el.classList.remove(cls);
+        void el.offsetWidth;
+        el.classList.add(cls);
+    }
+
+    function showCurrentMatch() {
+        const round = rounds[currentRound];
+        const match = round[currentMatch];
+        const totalRounds = Math.log2(pool.length);
+
+        document.getElementById('fight-round-label').textContent = getRoundName(currentRound, totalRounds);
+        document.getElementById('fight-progress').textContent = `Match ${currentMatch + 1} of ${round.length}`;
+
+        document.getElementById('img-a').src = match.a.image;
+        document.getElementById('name-a').textContent = match.a.name;
+        document.getElementById('show-a').textContent = match.a.show;
+
+        document.getElementById('img-b').src = match.b.image;
+        document.getElementById('name-b').textContent = match.b.name;
+        document.getElementById('show-b').textContent = match.b.show;
+
+        reAnimate('img-a', 'slide-in-left');
+        reAnimate('name-a', 'slide-in-left');
+        reAnimate('img-b', 'slide-in-right');
+        reAnimate('name-b', 'slide-in-right');
+
+        locked = false;
+    }
+
+    function pickWinner(side) {
+        if (locked) return;
+        locked = true;
+
+        const round = rounds[currentRound];
+        const match = round[currentMatch];
+        match.winner = side === 'a' ? match.a : match.b;
+
+        // Flash
+        const flash = document.getElementById('win-flash');
+        flash.style.animation = 'none';
+        void flash.offsetWidth;
+        flash.style.animation = 'flashAnim 0.45s ease forwards';
+
+        setTimeout(() => {
+            currentMatch++;
+
+            if (currentMatch >= round.length) {
+                const winners = round.map(m => m.winner);
+
+                if (winners.length === 1) {
+                    showChampion(winners[0]);
+                    return;
+                }
+
+                const nextRound = [];
+                for (let i = 0; i < winners.length; i += 2) {
+                    nextRound.push({ a: winners[i], b: winners[i + 1], winner: null });
+                }
+                rounds.push(nextRound);
+                currentRound++;
+                currentMatch = 0;
+            }
+
+            showCurrentMatch();
+        }, 450);
+    }
+
+    function showChampion(char) {
+    // Save win to localStorage
+    const wins = JSON.parse(localStorage.getItem('bracketWins') || '{}');
+    wins[char.name] = (wins[char.name] || 0) + 1;
+    localStorage.setItem('bracketWins', JSON.stringify(wins));
+
+    // rest stays the same
+    document.getElementById('fight-screen').style.display = 'none';
+    const screen = document.getElementById('champion-screen');
+    screen.style.display = 'flex';
+    document.getElementById('champ-img').src = char.image;
+    document.getElementById('champ-name').textContent = char.name;
+    document.getElementById('champ-show').textContent = char.show;
+}
+
+    function resetBracket() {
+        rounds = [];
+        currentRound = 0;
+        currentMatch = 0;
+        locked = false;
+        document.getElementById('champion-screen').style.display = 'none';
+        document.getElementById('fight-screen').style.display = 'none';
+        document.getElementById('setup-screen').style.display = 'flex';
+    }
+</script>
+</body>
+</html>
