@@ -428,7 +428,7 @@ const characters = [
         image: "https://i.pinimg.com/736x/bd/8c/ab/bd8cab3ba1530dfa260f3789f7946f10.jpg",
         backgroundimg: "https://i.pinimg.com/1200x/ba/15/8f/ba158f8f6f4b80254d8138df42e28dfe.jpg",
         show: "Invincible",
-        bio: "Mark Grayson is a teenager who inherits superpowers from his father and must navigate the brutal reality of being a superhero.",
+        bio: "Mark Grayson is a teenager who inherits superpowers from his father and must navigate the brutal reality of being a superhero Suggestion by:Nex01",
         gender: "Male", role: "Hero", species: "Human", powers: "Splode...", origin: "Earth", affiliations: "Teen Team",
     },
     
