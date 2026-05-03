@@ -181,7 +181,7 @@ const characters = [
         backgroundimg: "https://i.pinimg.com/736x/46/0e/2e/460e2e3d45189571b06290ccd863c98f.jpg",
         show: "Walking Dead",
         bio: "A resilient survivor who evolves from a compassionate farm girl into a hardened and capable leader. Driven by loss and loyalty, she balances empathy with strength, becoming one of the most determined figures in the fight to protect her people.",
-        gender: "Female", role: "Leader", species: "Dead City", powers: "Leadership", origin: "Gun Knives", affiliations: "Farm Prison Alexandria Hilltop Commonwealth",
+        gender: "Female", role: "Leader", species: "Dead City", powers: "Leadership", origin: "Handgun Knives", affiliations: "Farm Prison Alexandria Hilltop Commonwealth",
     },
     {
         name: "Dean Winchester",
