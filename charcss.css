@@ -1036,3 +1036,6 @@ h2 {
     color: white;
     border-color: #8b0000;
 }
+.card.empty .card-label {
+    display: none;
+}
